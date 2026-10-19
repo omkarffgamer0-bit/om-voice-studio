@@ -7,183 +7,154 @@
 <title>Om Voice Studio</title>
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;background:#0b0b12;color:#f5f5f5;
-  font-family:Arial,sans-serif;padding:20px
-}
+body{margin:0;background:#0b0b12;color:#f5f5f5;font-family:Arial,sans-serif;padding:20px}
 main{max-width:720px;margin:20px auto}
-h1{color:#ff4545}
+h1{color:#ff4545;text-align:center}
 p{color:#b9bac8;line-height:1.6}
-.panel{
-  background:#171722;border:1px solid #303041;
-  border-radius:16px;padding:18px
-}
-textarea,select,input{
-  width:100%;margin:8px 0 16px;padding:12px;
-  border-radius:9px;border:1px solid #414155;
-  background:#101019;color:white;font-size:16px
-}
+.panel{background:#171722;border:1px solid #303041;border-radius:16px;padding:18px;margin-top:18px}
+label{display:block;margin:14px 0 7px;color:#dedee8;font-size:14px}
+textarea,select,input{width:100%;padding:12px;border-radius:9px;border:1px solid #414155;background:#101019;color:white;font-size:16px}
 textarea{height:190px;resize:vertical}
-label{font-size:14px;color:#dedee8}
-button{
-  padding:12px 16px;border:0;border-radius:9px;
-  background:#ff4545;color:white;font-weight:bold;
-  margin:4px;cursor:pointer
-}
-button.secondary{background:#343444}
+button{padding:12px 16px;border:0;border-radius:9px;background:#ff4545;color:white;font-weight:bold;margin:5px 3px 5px 0;cursor:pointer}
 button:disabled{opacity:.5}
-#status{min-height:24px;color:#ffc16b}
-footer{font-size:12px;color:#9999aa;margin-top:20px}
+.secondary{background:#343444}
+#status{min-height:30px;margin-top:14px;overflow-wrap:anywhere}
+audio{width:100%;margin-top:15px}
+footer{font-size:12px;color:#9999aa;margin-top:20px;text-align:center}
 </style>
 </head>
 <body>
 <main>
-  <h1>🎙️ OM VOICE STUDIO</h1>
-  <p>अपनी कहानी को आवाज़ में सुनो। Hindi • English • Hinglish</p>
+<h1>🎙️ OM VOICE STUDIO</h1>
+<p style="text-align:center">अपनी कहानी को AI आवाज़ में बदलें — Hindi, English और Hinglish.</p>
 
-  <section class="panel">
-    <label for="script">अपनी स्क्रिप्ट लिखो</label>
-    <textarea id="script"
-      placeholder="यहाँ अपनी कहानी लिखो..."></textarea>
+<section class="panel">
+<label for="script">अपना स्क्रिप्ट लिखें</label>
+<textarea id="script" maxlength="3000" placeholder="यहाँ अपनी कहानी या डायलॉग लिखें..."></textarea>
+<p id="count">0 / 3000 characters</p>
 
-    <label for="language">भाषा / Voice Accent</label>
-    <select id="language">
-      <option value="hi-IN">Hindi</option>
-      <option value="en-IN">English (India)</option>
-      <option value="en-US">English (US)</option>
-    </select>
+<label for="language">भाषा / Voice Accent</label>
+<select id="language">
+<option value="Hindi">Hindi</option>
+<option value="English (India)">English (India)</option>
+<option value="English (US)">English (US)</option>
+<option value="Hinglish">Hinglish</option>
+</select>
 
-    <label for="voice">उपलब्ध आवाज़</label>
-    <select id="voice">
-      <option value="">Default voice</option>
-    </select>
+<label for="voice">आवाज़ चुनें</label>
+<select id="voice">
+<option value="Kore">Kore — Clear</option>
+<option value="Puck">Puck — Energetic</option>
+<option value="Charon">Charon — Deep narration</option>
+<option value="Fenrir">Fenrir — Strong</option>
+<option value="Aoede">Aoede — Smooth</option>
+<option value="Leda">Leda — Soft</option>
+<option value="Orus">Orus — Firm</option>
+<option value="Zephyr">Zephyr — Bright</option>
+</select>
 
-    <label for="rate">बोलने की स्पीड</label>
-    <input id="rate" type="range" min="0.65"
-      max="1.3" step="0.05" value="0.9">
+<label for="style">आवाज़ का स्टाइल</label>
+<select id="style">
+<option value="Natural, clear narration">Natural Narration</option>
+<option value="Deep, cinematic, dramatic storytelling">Cinematic / Dark</option>
+<option value="Energetic, exciting YouTube narration">YouTube Energetic</option>
+<option value="Emotional, slow, expressive storytelling">Emotional Story</option>
+<option value="Calm, soft and friendly">Calm Voice</option>
+<option value="Suspenseful thriller narration with dramatic pauses">Thriller / Suspense</option>
+</select>
 
-    <label for="pitch">आवाज़ की पिच</label>
-    <input id="pitch" type="range" min="0.65"
-      max="1.3" step="0.05" value="0.85">
+<button id="generate">🎙️ Generate AI Voice</button>
+<p id="status" role="status">अपना टेक्स्ट लिखकर Generate दबाएँ।</p>
+<audio id="player" controls hidden></audio>
+<br>
+<button id="download" class="secondary" hidden>⬇️ Download WAV</button>
+</section>
 
-    <button id="speak">▶ सुनो</button>
-    <button id="pause" class="secondary">⏸ रोकें</button>
-    <button id="stop" class="secondary">⏹ बंद करें</button>
-    <button id="copy" class="secondary">📋 टेक्स्ट कॉपी</button>
-
-    <p id="status" role="status">आवाज़ लोड हो रही है...</p>
-  </section>
-
-  <footer>
-    यह शुरुआती वर्जन ब्राउज़र की आवाज़ इस्तेमाल करता है।
-    MP3 बनाने के लिए अलग TTS इंजन जोड़ना होगा।
-  </footer>
+<footer>Om Voice Studio · AI-generated audio · इंटरनेट कनेक्शन ज़रूरी है</footer>
 </main>
 
 <script>
-const $ = id => document.getElementById(id);
-const synth = window.speechSynthesis;
-let voices = [];
+const API_URL = "https://om-voice-api.omkarffgamer0.workers.dev";
 
-function loadVoices(){
-  voices = synth.getVoices();
-  const select = $("voice");
-  const previous = select.value;
-  select.replaceChildren(new Option("Default voice", ""));
+const script = document.getElementById("script");
+const count = document.getElementById("count");
+const statusBox = document.getElementById("status");
+const generate = document.getElementById("generate");
+const player = document.getElementById("player");
+const download = document.getElementById("download");
 
-  voices.forEach((v, i) => {
-    select.add(new Option(`${v.name} (${v.lang})`, String(i)));
-  });
+let audioUrl = null;
 
-  if (previous && voices[Number(previous)]) {
-    select.value = previous;
-  }
-}
+script.addEventListener("input", () => {
+  count.textContent = script.value.length + " / 3000 characters";
+});
 
-function updateLanguage(){
-  const lang = $("language").value;
-  const filtered = voices.filter(v =>
-    lang === "hi-IN"
-      ? v.lang.toLowerCase().startsWith("hi")
-      : v.lang.toLowerCase().startsWith("en")
-  );
+generate.addEventListener("click", async () => {
+  const text = script.value.trim();
 
-  const select = $("voice");
-  const previous = select.value;
-  select.replaceChildren(new Option("Default voice", ""));
-
-  filtered.forEach(v => {
-    const index = voices.indexOf(v);
-    select.add(new Option(`${v.name} (${v.lang})`, String(index)));
-  });
-
-  if (previous && filtered.some(v =>
-    String(voices.indexOf(v)) === previous
-  )) select.value = previous;
-}
-
-if ("speechSynthesis" in window) {
-  loadVoices();
-  synth.onvoiceschanged = () => {
-    loadVoices();
-    updateLanguage();
-  };
-  $("language").addEventListener("change", updateLanguage);
-} else {
-  $("status").textContent = "इस ब्राउज़र में वॉइस सपोर्ट उपलब्ध नहीं है।";
-  $("speak").disabled = true;
-}
-
-$("speak").onclick = () => {
-  const text = $("script").value.trim();
   if (!text) {
-    $("status").textContent = "पहले अपनी स्क्रिप्ट लिखो।";
+    statusBox.textContent = "पहले अपना स्क्रिप्ट लिखें।";
     return;
   }
 
-  synth.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = $("language").value;
-  utterance.rate = Number($("rate").value);
-  utterance.pitch = Number($("pitch").value);
+  generate.disabled = true;
+  download.hidden = true;
+  player.hidden = true;
+  statusBox.textContent = "AI आवाज़ बना रहा है... कृपया इंतज़ार करें।";
 
-  const chosen = $("voice").value;
-  if (chosen !== "" && voices[Number(chosen)]) {
-    utterance.voice = voices[Number(chosen)];
-  }
-
-  utterance.onstart = () => {
-    $("status").textContent = "आवाज़ चल रही है...";
-  };
-  utterance.onend = () => {
-    $("status").textContent = "प्लेबैक पूरा हुआ।";
-  };
-  utterance.onerror = () => {
-    $("status").textContent = "आवाज़ चलाने में समस्या हुई।";
-  };
-
-  synth.speak(utterance);
-};
-
-$("pause").onclick = () => {
-  if (synth.speaking && !synth.paused) synth.pause();
-  else if (synth.paused) synth.resume();
-};
-
-$("stop").onclick = () => {
-  synth.cancel();
-  $("status").textContent = "प्लेबैक बंद किया गया।";
-};
-
-$("copy").onclick = async () => {
   try {
-    await navigator.clipboard.writeText($("script").value);
-    $("status").textContent = "टेक्स्ट कॉपी हो गया।";
-  } catch {
-    $("status").textContent =
-      "टेक्स्ट को चुनकर मैन्युअल कॉपी करें।";
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        text: text,
+        voice: document.getElementById("voice").value,
+        style:
+          document.getElementById("style").value +
+          ". Speak in " +
+          document.getElementById("language").value +
+          ". Pronounce clearly and naturally."
+      })
+    });
+
+    if (!response.ok) {
+      let message = "Request failed (" + response.status + ")";
+      try {
+        const errorData = await response.json();
+        message = errorData.details || errorData.error || message;
+      } catch (_) {}
+      throw new Error(message);
+    }
+
+    const blob = await response.blob();
+
+    if (!blob.size) {
+      throw new Error("खाली ऑडियो मिला। फिर से कोशिश करें।");
+    }
+
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    audioUrl = URL.createObjectURL(blob);
+
+    player.src = audioUrl;
+    player.hidden = false;
+    download.hidden = false;
+    statusBox.textContent = "✅ आवाज़ तैयार है! सुनें या डाउनलोड करें।";
+  } catch (error) {
+    statusBox.textContent = "❌ समस्या: " + error.message;
+  } finally {
+    generate.disabled = false;
   }
-};
+});
+
+download.addEventListener("click", () => {
+  if (!audioUrl) return;
+  const link = document.createElement("a");
+  link.href = audioUrl;
+  link.download = "om-voice.wav";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+});
 </script>
 </body>
 </html>
